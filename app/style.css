@@ -1,6 +1,7 @@
 /* style.css — The Union Ledger's look: a paper ledger, not a government site.
-   Serif display type (Georgia), ink-navy text on warm paper, one red accent.
-   System font stacks only: the site loads no font over the network. */
+   Serif display type (Georgia), ink-navy text on warm paper, one red accent
+   and one teal second accent. Ruled ledger tables carry the name. System
+   font stacks only: the site loads no font over the network. */
 
 :root {
   --paper: #f7f3ea;
@@ -31,9 +32,21 @@ body {
 a { color: var(--red); }
 a:hover { text-decoration-thickness: 2px; }
 
-/* Masthead */
-.masthead { background: var(--ink); color: #f7f3ea; padding: 18px 0 16px; }
-.masthead .wrap { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+/* Masthead: a red rule on top, the name in serif, the dateline at right. */
+.masthead {
+  background: var(--ink);
+  color: #f7f3ea;
+  padding: 16px 0 14px;
+  border-top: 4px solid var(--red);
+}
+.masthead-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.masthead-left { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
 .brand {
   font-family: var(--serif);
   font-size: 32px;
@@ -43,11 +56,18 @@ a:hover { text-decoration-thickness: 2px; }
   letter-spacing: 0.2px;
 }
 .brand-sub { color: #c9bda6; font-size: 14px; font-style: italic; }
+.masthead-date {
+  color: #c9bda6;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
 
-/* Section nav */
+/* Section nav: a double rule underneath, like a ledger's head rule. */
 .sections {
   background: var(--card);
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 4px double var(--ink);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -62,7 +82,7 @@ a:hover { text-decoration-thickness: 2px; }
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  padding: 10px 12px;
+  padding: 10px 11px;
   border-bottom: 3px solid transparent;
 }
 .sections a:hover { color: var(--red); }
@@ -91,9 +111,10 @@ h2 {
   color: var(--red);
   margin: 0;
 }
+.kicker .folio { color: var(--ink); }
 .lede { font-size: 19px; line-height: 1.5; color: #2c3e50; max-width: 720px; }
 
-/* Hero */
+/* Hero: two rows. The headline row is ruled in red, the second in teal. */
 .hero-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -103,12 +124,13 @@ h2 {
 .hero-stat {
   background: var(--card);
   border: 1px solid var(--line);
-  border-top: 4px solid var(--red);
   padding: 16px 16px 12px;
   text-decoration: none;
   color: var(--ink);
   display: block;
 }
+.hero-stat.tone-red { border-top: 4px solid var(--red); }
+.hero-stat.tone-teal { border-top: 4px solid var(--teal); }
 .hero-stat:hover { border-color: var(--red); }
 .hero-value {
   font-family: var(--serif);
@@ -185,6 +207,39 @@ h2 {
 .card-title { font-weight: 700; font-size: 16px; display: block; margin-top: 2px; }
 .card-blurb { font-size: 13.5px; color: var(--muted); display: block; margin-top: 4px; }
 
+/* Ledger tables: ruled rows, figures right-aligned in serif, the total
+   row in bold under a double rule — the site's namesake. */
+.ledger-box { margin: 22px 0; }
+.ledger-cap {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.ledger { border-collapse: collapse; width: 100%; font-size: 14.5px; background: var(--card); }
+.ledger th, .ledger td {
+  border-bottom: 1px solid var(--line);
+  padding: 9px 12px;
+  text-align: left;
+  vertical-align: baseline;
+}
+.ledger thead th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  border-bottom: 2px solid var(--ink);
+}
+.ledger .r { text-align: right; font-family: var(--serif); font-size: 17px; }
+.ledger thead .r { font-family: var(--sans); font-size: 12px; }
+.ledger tr.total-row th, .ledger tr.total-row td {
+  font-weight: 700;
+  border-top: 3px double var(--ink);
+  border-bottom: none;
+}
+
 /* Lists, tables, donut */
 .fact-list { padding-left: 20px; }
 .fact-list li { margin: 6px 0; }
@@ -240,6 +295,9 @@ footer a { color: #f7f3ea; }
   .card-grid { grid-template-columns: 1fr; }
   .sections { position: static; }
   .brand { font-size: 26px; }
+  .masthead-date { display: none; }
   .hero-value { font-size: 28px; }
   .stat-value { font-size: 30px; }
+  .ledger { font-size: 13.5px; }
+  .ledger .r { font-size: 15px; }
 }

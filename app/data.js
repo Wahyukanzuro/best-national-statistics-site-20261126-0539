@@ -1,91 +1,106 @@
-// data.js — every figure on The Union Ledger, with its source and year.
-// All figures were checked against their primary source (Census, BEA, BLS,
-// Treasury/GAO, CDC/NCHS, NCES, EIA). One vintage per series; where a series
-// was revised, the vintage used is stated in the source line. No figure here
-// is a model estimate presented as an official release.
+// data.js — the ledger's figures.
+// Every number on The Union Ledger lives here, with the agency that
+// published it and the year it covers. One vintage per series: where a
+// series was revised after publication, the source line names the vintage
+// in use and no other vintage is mixed in. October 2025 has no official
+// unemployment rate and no official CPI — the monthly series below carry
+// null for that month, and the charts draw the gap instead of joining
+// across it. A figure computed from two published figures is labelled
+// "derived" wherever it appears.
 
 export const SITE = {
-  name: 'The Union Ledger',
-  tagline: 'The United States, measured.',
+  title: 'The Union Ledger',
+  motto: 'The United States, measured.',
   dateline: 'Figures as published · November 2026',
-  country: 'United States of America',
+  place: 'United States of America',
 };
 
-export const HERO = [
-  {
-    value: '340.1m',
-    label: 'People',
-    detail: '1 July 2024 · +1.0% on a year earlier',
-    source: 'U.S. Census Bureau, Vintage 2024',
-    route: '#/population',
-  },
-  {
-    value: '$29.38T',
-    label: 'GDP, 2024',
-    detail: 'Nominal · real growth +3.0%',
-    source: 'Bureau of Economic Analysis, 2026 annual update',
-    route: '#/economy',
-  },
-  {
-    value: '4.1%',
-    label: 'Unemployment',
-    detail: 'October 2026 · payrolls +165,000',
-    source: 'Bureau of Labor Statistics, Oct 2026',
-    route: '#/jobs',
-  },
-  {
-    value: '79.0 yrs',
-    label: 'Life expectancy',
-    detail: '2024 · a record high',
-    source: 'CDC/NCHS, Mortality in the United States 2024',
-    route: '#/health',
-  },
+// Hero rows: [big figure, what it is, detail line, source line, link].
+// The first row is the headline; the second row is the rest of the
+// country's ledger, so the homepage carries eight figures at a glance.
+export const HERO_TOP = [
+  ['340.1m', 'People', '1 July 2024 · +1.0% on a year earlier', 'U.S. Census Bureau, Vintage 2024', '#/population'],
+  ['$29.38T', 'GDP, 2024', 'Nominal · real growth +3.0%', 'Bureau of Economic Analysis, 2026 annual update', '#/economy'],
+  ['4.1%', 'Unemployment', 'October 2026 · payrolls +165,000', 'Bureau of Labor Statistics, Oct 2026', '#/jobs'],
+  ['79.0 yrs', 'Life expectancy', '2024 · a record high', 'CDC/NCHS, Mortality in the United States 2024', '#/health'],
 ];
 
-// Monthly unemployment rate, 2025 (%). October is null: BLS published no
-// October 2025 rate — no data was collected 1 Oct–12 Nov 2025 during the
-// federal funding lapse. The gap is shown as a gap, never filled in.
-export const UNEMPLOYMENT_2025 = [
-  { m: 'Jan', v: 4.0 }, { m: 'Feb', v: 4.2 }, { m: 'Mar', v: 4.2 },
-  { m: 'Apr', v: 4.2 }, { m: 'May', v: 4.3 }, { m: 'Jun', v: 4.1 },
-  { m: 'Jul', v: 4.3 }, { m: 'Aug', v: 4.3 }, { m: 'Sep', v: 4.4 },
-  { m: 'Oct', v: null }, { m: 'Nov', v: 4.5 }, { m: 'Dec', v: 4.4 },
+export const HERO_MORE = [
+  ['$918.4bn', 'Trade deficit', 'Goods & services, 2024 · up 17% on 2023', 'U.S. Census Bureau & BEA, Feb 2025', '#/trade'],
+  ['$37.6T', 'Federal debt', 'End of FY2025 · up $2.2T in the year', 'U.S. Treasury / GAO, FY2025', '#/debt'],
+  ['$83,730', 'Median household income', '2024 · real median, CPS ASEC', 'U.S. Census Bureau, Sep 2025', '#/income'],
+  ['10.6%', 'Poverty rate', '2024 · down 0.4 points on 2023', 'U.S. Census Bureau, Sep 2025', '#/income'],
 ];
 
-// CPI-U, year-on-year %, 2025. October is null for the same reason as above.
-export const CPI_2025 = [
-  { m: 'Jan', v: 3.0 }, { m: 'Feb', v: 2.8 }, { m: 'Mar', v: 2.4 },
-  { m: 'Apr', v: 2.3 }, { m: 'May', v: 2.4 }, { m: 'Jun', v: 2.7 },
-  { m: 'Jul', v: 2.7 }, { m: 'Aug', v: 2.9 }, { m: 'Sep', v: 3.0 },
-  { m: 'Oct', v: null }, { m: 'Nov', v: 2.7 }, { m: 'Dec', v: 2.7 },
+// Monthly series as [month, value]; null means the month was not published.
+export const UNEMPLOYMENT = [
+  ['Jan', 4.0], ['Feb', 4.2], ['Mar', 4.2], ['Apr', 4.2], ['May', 4.3],
+  ['Jun', 4.1], ['Jul', 4.3], ['Aug', 4.3], ['Sep', 4.4], ['Oct', null],
+  ['Nov', 4.5], ['Dec', 4.4],
+];
+
+export const CPI = [
+  ['Jan', 3.0], ['Feb', 2.8], ['Mar', 2.4], ['Apr', 2.3], ['May', 2.4],
+  ['Jun', 2.7], ['Jul', 2.7], ['Aug', 2.9], ['Sep', 3.0], ['Oct', null],
+  ['Nov', 2.7], ['Dec', 2.7],
+];
+
+// The sections, in reading order. `no` is the folio number printed at the
+// top of the page; `figure` is the one number that stands for the section.
+export const SECTIONS = [
+  { no: '01', slug: 'population', title: 'Population', figure: '340.1m', blurb: 'People, 1 July 2024 — the fastest growth since 2001.' },
+  { no: '02', slug: 'economy', title: 'Economy', figure: '$29.38T', blurb: 'Nominal GDP, 2024 — real growth +3.0%.' },
+  { no: '03', slug: 'income', title: 'Income', figure: '$83,730', blurb: 'Median household income, 2024 — poverty 10.6%.' },
+  { no: '04', slug: 'jobs', title: 'Jobs', figure: '4.1%', blurb: 'Unemployment, October 2026 — payrolls +165,000.' },
+  { no: '05', slug: 'prices', title: 'Prices', figure: '~2.7%', blurb: 'CPI inflation, 2025 annual average.' },
+  { no: '06', slug: 'trade', title: 'Trade', figure: '$918.4bn', blurb: 'Goods and services deficit, 2024.' },
+  { no: '07', slug: 'health', title: 'Health', figure: '79.0 yrs', blurb: 'Life expectancy, 2024 — a record high.' },
+  { no: '08', slug: 'education', title: 'Education', figure: '87.4%', blurb: 'High-school graduation rate, 2022–23.' },
+  { no: '09', slug: 'energy', title: 'Energy', figure: '4.30T kWh', blurb: 'Electricity generated, 2024.' },
+  { no: '10', slug: 'debt', title: 'Government debt', figure: '$37.6T', blurb: 'Total federal debt, end of FY2025.' },
 ];
 
 export const POPULATION = {
   total: '340.1 million',
-  totalNote: 'The 2020 census counted 331.5 million; growth since then has been driven by migration, not births.',
-  driver: 'Growth was driven by net international migration: 2.8 million people in 2023–24.',
+  growth: '+3.3m',
+  growthNote: 'People added in the year to 1 July 2024 — the fastest annual growth since 2001. The 2020 census counted 331.5 million.',
+  migration: '2.8m',
+  migrationNote: 'Net international migration in 2023–24, the driver of the year’s growth.',
+  // [state, millions, share of the U.S. population % — derived, rounded].
+  // The five together hold 127.04 million people, 37.4% of the country.
   states: [
-    { name: 'California', v: 39.43 },
-    { name: 'Texas', v: 31.29 },
-    { name: 'Florida', v: 23.37 },
-    { name: 'New York', v: 19.87 },
-    { name: 'Pennsylvania', v: 13.08 },
+    ['California', 39.43, 11.6],
+    ['Texas', 31.29, 9.2],
+    ['Florida', 23.37, 6.9],
+    ['New York', 19.87, 5.8],
+    ['Pennsylvania', 13.08, 3.8],
   ],
-  statesNote: 'The five largest states hold about 39% of the country. Figures are millions, Vintage 2024.',
+  statesTotal: ['Five largest states', 127.04, 37.4],
+  statesNote: 'Millions of people, 1 July 2024. Shares are derived from the published populations and rounded to one decimal place.',
   source: 'U.S. Census Bureau, Vintage 2024 Population Estimates',
 };
 
 export const ECONOMY = {
-  gdp: [
-    { year: '2023', v: 27.83 },
-    { year: '2024', v: 29.38 },
-    { year: '2025', v: 30.86 },
+  // [year, nominal GDP $T, real growth % (null where not shown)].
+  gdpYears: [
+    ['2023', 27.83, null],
+    ['2024', 29.38, 3.0],
+    ['2025', 30.86, 2.3],
   ],
-  gdpNote: 'Nominal GDP, trillions of dollars. Real growth: +3.0% in 2024 and +2.3% in 2025.',
   perCapita: '~$86,400',
   perCapitaNote: 'GDP per person in 2024, derived from $29.38 trillion divided by 340.1 million people.',
-  revisionNote: 'GDP for 2024 was revised in the 2026 annual update (first published as $29.18 trillion, 2.8% real growth). This page uses the revised vintage throughout.',
+  revisionNote: 'GDP for 2024 was revised in the 2026 annual update: first published as $29.18 trillion with 2.8% real growth. This page uses the revised vintage throughout.',
   source: 'Bureau of Economic Analysis, NIPA Table 1.1.5 (2026 annual update)',
+};
+
+export const INCOME = {
+  median: '$83,730',
+  medianNote: 'Real median household income, 2024. In 2023 it was $82,690 — the change is not statistically significant.',
+  poverty: '10.6%',
+  povertyNote: 'Official poverty rate, 2024 — down 0.4 percentage points on 2023 (11.0%).',
+  spm: '12.9%',
+  spmNote: 'Supplemental Poverty Measure, 2024. It counts taxes, transfers and the cost of essentials the official measure leaves out.',
+  source: 'U.S. Census Bureau, Income, Poverty and Health Insurance Coverage 2024 (CPS ASEC, released 9 September 2025)',
 };
 
 export const JOBS = {
@@ -93,12 +108,14 @@ export const JOBS = {
   rateNote: 'Unemployment rate, October 2026 — down from 4.2% in September 2026.',
   payrolls: '+165,000',
   payrollsNote: 'Nonfarm payroll jobs added in October 2026, against an average of +48,000 a month over the prior 12 months.',
-  labourForce: '170.7m',
-  employed: '163.6m',
-  unemployed: '7.1m',
   participation: '61.9%',
+  participationNote: 'Labour-force participation, October 2026. Civilian labour force 170.7 million.',
+  employed: '163.6m',
+  employedNote: 'People in work, October 2026, of a 170.7 million labour force.',
+  unemployed: '7.1m',
+  unemployedNote: 'People without work but looking, October 2026.',
   empPop: '59.3%',
-  detailNote: 'Civilian labour force 170.7 million; 163.6 million employed, 7.1 million unemployed. Labour-force participation 61.9%; employment–population ratio 59.3%.',
+  empPopNote: 'Employment–population ratio, October 2026: the share of the population aged 16 and over in work.',
   gapNote: 'October 2025 has no official rate: BLS collected no data from 1 October to 12 November 2025. The chart leaves the month blank rather than guessing.',
   source: 'Bureau of Labor Statistics, Employment Situation, October 2026 (released 6 November 2026)',
 };
@@ -106,10 +123,12 @@ export const JOBS = {
 export const PRICES = {
   annual: '~2.7%',
   annualNote: 'CPI inflation in 2025, annual average (2.63% on the BLS average basis).',
+  sep2026: '3.7%',
+  sep2026Note: 'CPI, September 2026, year on year — the latest monthly print in this vintage. Shown with its year, apart from the 2025 series below.',
   latest: [
-    { label: 'September 2025', v: '+3.0%' },
-    { label: 'November 2025', v: '+2.7%' },
-    { label: 'December 2025', v: '+2.7%' },
+    ['September 2025', '+3.0%'],
+    ['November 2025', '+2.7%'],
+    ['December 2025', '+2.7%'],
   ],
   latestNote: 'Latest clean monthly year-on-year prints. October 2025 was not published — see the gap note on the Jobs page.',
   source: 'Bureau of Labor Statistics, Consumer Price Index',
@@ -119,13 +138,25 @@ export const TRADE = {
   deficit: '$918.4bn',
   deficitNote: 'Goods and services deficit, 2024 — up 17% on 2023.',
   goodsDeficit: '$1.21T',
-  goodsDeficitNote: 'Goods deficit, a record. The services surplus was $293bn.',
+  goodsDeficitNote: 'Goods deficit, a record.',
+  services: '$293bn',
+  servicesNote: 'Services surplus, 2024 — the offset to the goods deficit.',
   exports: '$3.19T',
   exportsNote: 'Exports of goods and services, a record. Goods exports $2.08T.',
   imports: '$4.11T',
   importsNote: 'Imports of goods and services, a record. Goods imports $3.30T.',
   china: '$295.4bn',
   chinaNote: 'Largest bilateral goods deficit: China.',
+  // Ledger of the 2024 balance, billions of dollars (published figures).
+  // The overall balance is the last row, as a ledger's total is.
+  balance: [
+    ['Exports, goods and services', '3,190'],
+    ['Imports, goods and services', '4,110'],
+    ['Balance, goods only', '−1,210'],
+    ['Balance, services only', '+293'],
+    ['Goods balance with China', '−295.4'],
+    ['Balance, goods and services', '−918.4'],
+  ],
   vintageNote: 'This page uses the original February 2025 release. A June 2026 annual revision put the 2024 deficit at $885.5bn; the two vintages are not mixed here.',
   source: 'U.S. Census Bureau & BEA, U.S. International Trade in Goods and Services, Annual 2024 (February 2025)',
 };
@@ -137,10 +168,11 @@ export const HEALTH = {
   deathRateNote: 'Age-adjusted death rate per 100,000 people in 2024, down from 750.5 in 2023.',
   uninsured: '8.0%',
   uninsuredNote: '27.1 million people had no health insurance in 2024; 92.0% had coverage.',
+  // [coverage type, % of people].
   coverage: [
-    { name: 'Employment-based', v: 53.8 },
-    { name: 'Medicare', v: 19.1 },
-    { name: 'Medicaid', v: 17.6 },
+    ['Employment-based', 53.8],
+    ['Medicare', 19.1],
+    ['Medicaid', 17.6],
   ],
   coverageNote: 'Share of people covered, by type of insurance, 2024. Shares overlap: some people hold more than one type.',
   source: 'CDC/NCHS, Mortality in the United States 2024 · U.S. Census Bureau, Health Insurance Coverage 2024',
@@ -149,21 +181,29 @@ export const HEALTH = {
 export const EDUCATION = {
   graduation: '87.4%',
   graduationNote: 'Public high-school graduation rate (adjusted cohort graduation rate), school year 2022–23.',
-  context: 'The rate has risen steadily for a decade: it stood at 79% in 2010–11. The four-year cohort measure counts students who graduate on time with a regular diploma.',
+  context: 'The rate has risen steadily since the measure began: it stood at 79% in 2010–11, the first year it was collected, and reached 87.4% in 2022–23. The four-year cohort measure counts students who graduate on time with a regular diploma.',
   source: 'National Center for Education Statistics, Condition of Education',
 };
 
 export const ENERGY = {
   generation: '4.30T kWh',
   generationNote: 'Electricity generated in the United States, 2024.',
+  // [source, % of generation].
   mix: [
-    { name: 'Natural gas', v: 43 },
-    { name: 'Renewables', v: 23 },
-    { name: 'Nuclear', v: 18 },
-    { name: 'Coal', v: 15 },
-    { name: 'Petroleum', v: 0.4 },
+    ['Natural gas', 43],
+    ['Renewables', 23],
+    ['Nuclear', 18],
+    ['Coal', 15],
+    ['Petroleum', 0.4],
   ],
-  mixNote: 'Share of electricity generation, 2024. Within renewables: wind 10.5%, hydro 5.5%, solar 5.1%.',
+  mixNote: 'Share of electricity generation, 2024.',
+  // [renewable source, % of all generation].
+  renewables: [
+    ['Wind', 10.5],
+    ['Hydro', 5.5],
+    ['Solar', 5.1],
+  ],
+  renewablesNote: 'Wind, hydro and solar together supplied 21.1% of generation; all renewables supplied 23%.',
   production: '103.31',
   productionNote: 'Quadrillion BTU of total primary energy produced in 2024.',
   source: 'U.S. Energy Information Administration, U.S. Energy Facts 2024',
@@ -171,24 +211,24 @@ export const ENERGY = {
 
 export const DEBT = {
   total: '$37.6T',
-  totalNote: 'Total federal debt at the end of fiscal year 2025 (30 September 2025), up $2.2 trillion in the year.',
+  totalNote: 'Total federal debt at the end of fiscal year 2025 (30 September 2025).',
+  increase: '+$2.2T',
+  increaseNote: 'Added to the total federal debt during FY2025.',
   public: '$30.3T',
   publicNote: 'Debt held by the public.',
   intra: '$7.4T',
   intraNote: 'Intragovernmental holdings — debt the government owes to itself, mostly the Social Security trust funds.',
   deficit: '$1.8T',
   deficitNote: 'Federal budget deficit in fiscal year 2025.',
+  // Ledger of the FY2025 debt, trillions of dollars (published figures,
+  // rounded to one decimal: the components sum to $37.7 trillion against
+  // a published total of $37.6 trillion).
+  ledger: [
+    ['Total federal debt', '37.6'],
+    ['Held by the public', '30.3'],
+    ['Intragovernmental', '7.4'],
+    ['Budget deficit, FY2025', '1.8'],
+    ['Debt added in FY2025', '2.2'],
+  ],
   source: 'U.S. Treasury / GAO, Schedules of Federal Debt, FY2025',
 };
-
-export const SECTIONS = [
-  { route: '#/population', title: 'Population', figure: '340.1m', blurb: 'People, 1 July 2024 — the fastest growth since 2001.' },
-  { route: '#/economy', title: 'Economy', figure: '$29.38T', blurb: 'Nominal GDP, 2024 — real growth +3.0%.' },
-  { route: '#/jobs', title: 'Jobs', figure: '4.1%', blurb: 'Unemployment, October 2026 — payrolls +165,000.' },
-  { route: '#/prices', title: 'Prices', figure: '~2.7%', blurb: 'CPI inflation, 2025 annual average.' },
-  { route: '#/trade', title: 'Trade', figure: '$918.4bn', blurb: 'Goods and services deficit, 2024.' },
-  { route: '#/health', title: 'Health', figure: '79.0 yrs', blurb: 'Life expectancy, 2024 — a record high.' },
-  { route: '#/education', title: 'Education', figure: '87.4%', blurb: 'High-school graduation rate, 2022–23.' },
-  { route: '#/energy', title: 'Energy', figure: '4.30T kWh', blurb: 'Electricity generated, 2024.' },
-  { route: '#/debt', title: 'Government debt', figure: '$37.6T', blurb: 'Total federal debt, end of FY2025.' },
-];

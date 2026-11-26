@@ -1,6 +1,7 @@
 // main.js — the router: reads the hash, renders the matching page.
-// No framework, no fetch, no network: the whole site is local files and
-// the router only swaps which view's HTML sits inside <main>.
+// No framework, no fetch, no network. The whole site is local files; the
+// router only swaps which view's HTML sits inside <main> and marks the
+// matching link in the section nav.
 
 import { ROUTES } from './views.js';
 import { SECTIONS } from './data.js';
@@ -8,22 +9,22 @@ import { SECTIONS } from './data.js';
 const app = document.getElementById('app');
 const nav = document.getElementById('section-nav');
 
-function navLink(route, title) {
+function link(route, title) {
   return `<a href="${route}" data-route="${route}">${title}</a>`;
 }
 
-nav.innerHTML = navLink('#/', 'Home')
-  + SECTIONS.map((s) => navLink(s.route, s.title)).join('')
-  + navLink('#/sources', 'Sources');
+nav.innerHTML = link('#/', 'Home')
+  + SECTIONS.map((s) => link(`#/${s.slug}`, s.title)).join('')
+  + link('#/sources', 'Sources');
 
-function currentRoute() {
+function pathFromHash() {
   const hash = window.location.hash || '#/';
   const path = hash.slice(1) || '/';
-  return ROUTES[path] ? path : '/';
+  return Object.prototype.hasOwnProperty.call(ROUTES, path) ? path : '/';
 }
 
-function render() {
-  const path = currentRoute();
+function renderPage() {
+  const path = pathFromHash();
   const page = ROUTES[path];
   document.title = page.title;
   app.innerHTML = page.render();
@@ -33,5 +34,5 @@ function render() {
   window.scrollTo(0, 0);
 }
 
-window.addEventListener('hashchange', render);
-render();
+window.addEventListener('hashchange', renderPage);
+renderPage();

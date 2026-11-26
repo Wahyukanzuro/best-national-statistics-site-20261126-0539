@@ -1,7 +1,7 @@
-// serve.ts — a tiny static server for local development only (Node 22,
-// standard library only). `node serve.ts` serves app/ on
-// http://localhost:8080 (`--port <n>` for another port). It is not part of
-// the entry: the site itself is plain static files under app/.
+// A tiny static server for app/ (Node 22, standard library only), so the site can be run locally without a
+// build step: `node serve.ts` serves app/ on http://localhost:8080 (`--port <n>` for another port). It sends the MIME
+// types a browser needs, refuses any path outside app/, and otherwise does nothing clever: this is a development
+// convenience, not a web server for the internet.
 import { createReadStream, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, join, normalize, resolve, sep } from 'node:path';
@@ -23,6 +23,10 @@ const MIME: Record<string, string> = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.ico': 'image/x-icon',
+  '.woff2': 'font/woff2',
+  '.webmanifest': 'application/manifest+json',
 };
 
 createServer((request, response) => {
